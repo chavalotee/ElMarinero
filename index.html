@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cafetería artesanal con los mejores granos seleccionados">
+    <title>Aroma & Sabor - Cafetería Artesanal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header y Navegación -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="logo">
+                    <i class="fas fa-coffee"></i>
+                    Aroma & Sabor
+                </a>
+                <ul class="nav-menu">
+                    <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+                    <li><a href="#menu" class="nav-link">Menú</a></li>
+                    <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
+                    <li><a href="#galeria" class="nav-link">Galería</a></li>
+                    <li><a href="#testimonios" class="nav-link">Testimonios</a></li>
+                    <li><a href="#contacto" class="nav-link">Contacto</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">El arte del café perfecto</h1>
+                <p class="hero-subtitle">Descubre nuestra selección de granos premium y disfruta de una experiencia única</p>
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn btn-primary">Ver Menú</a>
+                    <a href="#reservar" class="btn btn-outline">Reservar Mesa</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Menú -->
+    <section id="menu" class="menu">
+        <div class="container">
+            <h2 class="section-title">Nuestro Menú</h2>
+            <p class="section-subtitle">Cada taza cuenta una historia</p>
+            
+            <div class="menu-tabs">
+                <button class="tab-btn active" data-tab="cafes">Cafés Especiales</button>
+                <button class="tab-btn" data-tab="bebidas">Bebidas Frías</button>
+                <button class="tab-btn" data-tab="postres">Postres</button>
+                <button class="tab-btn" data-tab="sandwiches">Sándwiches</button>
+            </div>
+
+            <div class="menu-grid" id="menuGrid">
+                <!-- Los items se cargarán dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotros -->
+    <section id="nosotros" class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2 class="section-title">Nuestra Historia</h2>
+                    <p>Desde 2010, Aroma & Sabor ha sido el refugio perfecto para los amantes del buen café. Nuestros granos son seleccionados directamente de las mejores fincas de Colombia, Etiopía y Guatemala.</p>
+                    <div class="features">
+                        <div class="feature-item">
+                            <i class="fas fa-seedling"></i>
+                            <h3>Granos Orgánicos</h3>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-mug-hot"></i>
+                            <h3>Tostado Artesanal</h3>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-heart"></i>
+                            <h3>Hecho con Amor</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb" alt="Nuestra cafetería">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería -->
+    <section id="galeria" class="gallery">
+        <div class="container">
+            <h2 class="section-title">Galería</h2>
+            <p class="section-subtitle">Momentos capturados en Aroma & Sabor</p>
+            <div class="gallery-grid">
+                <!-- Imágenes de la galería -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section id="testimonios" class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+            <div class="testimonials-grid">
+                <!-- Testimonios -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contáctanos</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Calle del Café 123, Madrid</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <p>+34 912 345 678</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <p>Lun-Vie: 7:00 - 22:00<br>Sáb-Dom: 8:00 - 23:00</p>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <input type="text" placeholder="Nombre" required>
+                    <input type="email" placeholder="Email" required>
+                    <textarea placeholder="Tu mensaje" rows="5" required></textarea>
+                    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-info">
+                    <h3><i class="fas fa-coffee"></i> Aroma & Sabor</h3>
+                    <p>La mejor experiencia en café desde 2010</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="#menu">Menú</a></li>
+                        <li><a href="#nosotros">Nosotros</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Aroma & Sabor. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
