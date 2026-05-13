@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Marinero | Lomitería en Asunción</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        darker: '#111111',
+                        gold: '#fde047', /* Amarillo más clarito y brillante */
+                        goldHover: '#facc15', 
+                        brandBlue: '#0f3b9c',
+                        brandYellow: '#fde047'
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'text-reveal': 'reveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        reveal: {
+                            '0%': { transform: 'translateY(100%)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #fde047; }
+
+        .reveal-wrapper { overflow: hidden; display: inline-block; }
+        .map-dark-filter { filter: invert(90%) hue-rotate(180deg) grayscale(80%) contrast(120%); }
+
+        .tab-btn.active {
+            background-color: #fde047;
+            color: #000;
+            border-color: #fde047;
+            box-shadow: 0 0 15px rgba(253, 224, 71, 0.4);
+        }
+        
+        .tab-content { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .menu-list-item:hover {
+            border-bottom-color: rgba(253, 224, 71, 0.5);
+            padding-left: 0.5rem;
+        }
+        .menu-dots {
+            flex-grow: 1;
+            border-bottom: 1px dotted rgba(255,255,255,0.2);
+            margin: 0 10px;
+            position: relative;
+            top: -4px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-gold selection:text-black">
+
+    <nav class="fixed w-full z-50 transition-all duration-300 backdrop-blur-md bg-darker/80 border-b border-white/5 py-4" id="navbar">
+        <div class="container mx-auto px-4 md:px-8 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer">
+                <div class="relative w-16 h-16 flex items-center justify-center rounded-full bg-brandBlue border-2 border-brandYellow shadow-[0_0_15px_rgba(15,59,156,0.5)]">
+                    <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full">
+                        <path id="top-curve" d="M 18 50 A 32 32 0 1 1 82 50" fill="transparent"/>
+                        <path id="bottom-curve" d="M 18 50 A 32 32 0 0 0 82 50" fill="transparent"/>
+                        <text font-family="Montserrat, sans-serif" font-weight="900" font-size="14" fill="#fde047">
+                            <textPath href="#top-curve" startOffset="50%" text-anchor="middle">EL MARINERO</textPath>
+                        </text>
+                        <text font-family="Montserrat, sans-serif" font-weight="900" font-size="14" fill="#fde047">
+                            <textPath href="#bottom-curve" startOffset="50%" text-anchor="middle">RESTOBAR</textPath>
+                        </text>
+                    </svg>
+                    <i class="fa-solid fa-dharmachakra text-brandYellow text-2xl relative z-10"></i>
+                </div>
+            </div>
+            <a href="#menu" class="hidden md:inline-block bg-transparent border border-gold text-gold hover:bg-gold hover:text-black font-bold py-2 px-6 rounded-full transition-all duration-300">
+                Ver Menú
+            </a>
+        </div>
+    </nav>
+
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 w-full h-full">
+            <div class="absolute inset-0 bg-gradient-to-b from-darker/80 via-darker/70 to-darker z-10"></div>
+            <img src="lomito.jpg" onerror="this.src='https://images.unsplash.com/photo-1627308595229-7830f5c910ae?q=80&w=2070&auto=format&fit=crop'" alt="Lomito Fondo" class="object-cover w-full h-full opacity-50 scale-105 animate-[float_20s_ease-in-out_infinite]" />
+        </div>
+
+        <div class="relative z-20 text-center px-4 max-w-5xl mx-auto flex flex-col items-center mt-10">
+            <div class="mb-4">
+                <span class="text-gold font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-xs md:text-sm" data-aos="fade-down" data-aos-delay="200">Asunción, Avenida Carlos Antonio López</span>
+            </div>
+            
+            <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+                <span class="reveal-wrapper"><span class="block animate-text-reveal" style="animation-delay: 0.3s">EL SABOR QUE</span></span>
+                <span class="reveal-wrapper"><span class="block animate-text-reveal text-gold" style="animation-delay: 0.5s">GOBIERNA LA NOCHE.</span></span>
+            </h1>
+            
+            <p class="text-gray-300 text-lg md:text-2xl font-light mb-10 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="800">
+                Tu lomitería de calidad y confianza en el barrio Sajonia, no te lo puedes perder.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center" data-aos="fade-up" data-aos-delay="1000">
+                <a href="#menu" class="bg-gold text-black font-black py-4 px-8 rounded-full hover:bg-goldHover hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(253,224,71,0.4)] flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-utensils"></i> VER MENÚ
+                </a>
+                <a href="#" onclick="pedirWhatsApp('Consulta General', '')" class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold py-4 px-8 rounded-full hover:bg-white/20 hover:border-white/40 transition-all duration-300 flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-green-400 text-xl"></i> PIDE AHORA
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="py-24 bg-darker relative">
+        <div class="container mx-auto px-4 md:px-8 relative z-10">
+            
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="font-serif text-4xl md:text-5xl font-bold mb-4">Nuestra <span class="text-gold">Carta</span></h2>
+                <div class="w-24 h-1 bg-gold mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">Explora nuestro menú preparado al momento con ingredientes frescos. El sabor clásico que nunca falla.</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-16" data-aos="fade-up" data-aos-delay="100">
+                <button class="tab-btn active px-4 md:px-6 py-2 md:py-3 rounded-full border border-gray-700 font-bold text-sm md:text-base transition-all" data-target="principales">Platos Principales</button>
+                <button class="tab-btn px-4 md:px-6 py-2 md:py-3 rounded-full border border-gray-700 font-bold text-sm md:text-base transition-all" data-target="variedades">Entre Panes & Variedades</button>
+                <button class="tab-btn px-4 md:px-6 py-2 md:py-3 rounded-full border border-gray-700 font-bold text-sm md:text-base transition-all" data-target="entradas">Entradas & Extras</button>
+                <button class="tab-btn px-4 md:px-6 py-2 md:py-3 rounded-full border border-gray-700 font-bold text-sm md:text-base transition-all" data-target="bebidas">Bebidas & Tragos</button>
+            </div>
+
+            <div id="principales" class="tab-content active">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                    <div class="group bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5 hover:border-gold/50 transition-all duration-500 hover:-translate-y-2">
+                        <div class="relative h-64 overflow-hidden bg-black flex items-center justify-center">
+                            <i class="fa-solid fa-camera text-white/10 text-5xl relative z-0"></i>
+                        </div>
+                        <div class="p-6 relative z-20">
+                            <h3 class="font-serif text-2xl font-bold mb-2">Hamburguesa Completa</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">Pan, hamburguesa casera, queso muzzarella, huevo, jamón, lechuga, tomate, mayo casera y kétchup.</p>
+                            <div class="flex justify-between items-end">
+                                <div><span class="text-2xl font-black text-gold">Gs. 18.000</span></div>
+                                <button onclick="pedirWhatsApp('Hamburguesa Completa', '18.000')" class="w-12 h-12 rounded-full bg-white/10 hover:bg-gold hover:text-black flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-plus text-xl"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5 hover:border-gold/50 transition-all duration-500 hover:-translate-y-2">
+                        <div class="relative h-64 overflow-hidden bg-black flex items-center justify-center">
+                            <div class="absolute top-4 left-4 z-20 bg-darker/80 backdrop-blur-sm border border-gold/30 text-gold text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Más Pedido</div>
+                            <i class="fa-solid fa-camera text-white/10 text-5xl relative z-0"></i>
+                        </div>
+                        <div class="p-6 relative z-20">
+                            <h3 class="font-serif text-2xl font-bold mb-2">Lomito Árabe</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">Preparado al momento. Pan árabe, carne, pollo o mixto, salsa de ajo, tomate, repollo y sal.</p>
+                            <div class="flex justify-between items-end">
+                                <div><span class="block text-xs text-gray-500 uppercase">Desde</span><span class="text-2xl font-black text-gold">Gs. 25.000</span></div>
+                                <button onclick="pedirWhatsApp('Lomito Árabe', '25.000')" class="w-12 h-12 rounded-full bg-white/10 hover:bg-gold hover:text-black flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-plus text-xl"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="group bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5 hover:border-gold/50 transition-all duration-500 hover:-translate-y-2">
+                        <div class="relative h-64 overflow-hidden bg-black">
+                        
+                        </div>
+                        <div class="p-6 relative z-20">
+                            <h3 class="font-serif text-2xl font-bold mb-2">Sándwich Lomito Doble</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">Pan, DOBLE lomito, queso muzzarella, huevo, jamón, lechuga, tomate, mayo casera y kétchup.</p>
+                            <div class="flex justify-between items-end">
+                                <div><span class="text-2xl font-black text-gold">Gs. 33.000</span></div>
+                                <button onclick="pedirWhatsApp('Sándwich Lomito Doble', '33.000')" class="w-12 h-12 rounded-full bg-white/10 hover:bg-gold hover:text-black flex items-center justify-center transition-all duration-300"><i class="fa-solid fa-plus text-xl"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#111] border border-white/5 rounded-2xl p-6 md:p-8 mt-8">
+                    <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2"><i class="fa-solid fa-fire-burner mr-2 text-red-500"></i> Asaditos Clásicos</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
+                        <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Carne / Pollo / Cerdo</span><div class="menu-dots"></div><span class="text-gold font-bold">7.000</span></div>
+                        <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Corazón / Matambre / Lengua</span><div class="menu-dots"></div><span class="text-gold font-bold">7.000</span></div>
+                        <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Chinchulín / Choriqueso</span><div class="menu-dots"></div><span class="text-gold font-bold">7.000</span></div>
+                        <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Chorizo Parrillero / Butifarra / Morcillita</span><div class="menu-dots"></div><span class="text-gold font-bold">7.000</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="variedades" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-[#111] border border-white/5 rounded-2xl p-6 md:p-8">
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2">Sándwiches de Lomito</h4>
+                        <div class="space-y-4">
+                            <div class="menu-list-item flex-col items-start gap-1"><div class="w-full flex justify-between"><span class="text-gray-200 font-bold">Lomito Simple</span><div class="menu-dots"></div><span class="text-gold font-bold">22.000</span></div><span class="text-xs text-gray-500">Pan, lomito, queso muzzarella, jamón, lechuga, tomate, mayo y kétchup.</span></div>
+                            <div class="menu-list-item flex-col items-start gap-1"><div class="w-full flex justify-between"><span class="text-gray-200 font-bold">Lomito Completo</span><div class="menu-dots"></div><span class="text-gold font-bold">23.000</span></div><span class="text-xs text-gray-500">Agrega huevo.</span></div>
+                            <div class="menu-list-item flex-col items-start gap-1"><div class="w-full flex justify-between"><span class="text-gray-200 font-bold">Lomito Doble</span><div class="menu-dots"></div><span class="text-gold font-bold">33.000</span></div><span class="text-xs text-gray-500">Doble lomito y todos los ingredientes.</span></div>
+                        </div>
+
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2 mt-8">Hamburguesas</h4>
+                        <div class="space-y-4">
+                            <div class="menu-list-item flex-col items-start gap-1"><div class="w-full flex justify-between"><span class="text-gray-200 font-bold">Hamburguesa Simple</span><div class="menu-dots"></div><span class="text-gold font-bold">16.000</span></div><span class="text-xs text-gray-500">Pan, hamburguesa casera, muzzarella, jamón, lechuga, tomate, mayo y kétchup.</span></div>
+                            <div class="menu-list-item flex-col items-start gap-1"><div class="w-full flex justify-between"><span class="text-gray-200 font-bold">Hamburguesa Completa</span><div class="menu-dots"></div><span class="text-gold font-bold">18.000</span></div><span class="text-xs text-gray-500">Agrega huevo.</span></div>
+                            <div class="menu-list-item flex-col items-start gap-1"><div class="w-full flex justify-between"><span class="text-gray-200 font-bold">Hamburguesa Doble</span><div class="menu-dots"></div><span class="text-gold font-bold">25.000</span></div><span class="text-xs text-gray-500">Doble hamburguesa casera.</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#111] border border-white/5 rounded-2xl p-6 md:p-8">
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2">Tacos</h4>
+                        <div class="space-y-3">
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Carne</span><div class="menu-dots"></div><span class="text-gold font-bold">26.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Pollo / Mixto</span><div class="menu-dots"></div><span class="text-gold font-bold">25.000</span></div>
+                        </div>
+
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2 mt-8">Quesadillas</h4>
+                        <div class="space-y-3">
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Queso</span><div class="menu-dots"></div><span class="text-gold font-bold">18.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Napolitana</span><div class="menu-dots"></div><span class="text-gold font-bold">20.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Carne</span><div class="menu-dots"></div><span class="text-gold font-bold">26.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Pollo / Mixta</span><div class="menu-dots"></div><span class="text-gold font-bold">25.000</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="entradas" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-[#111] border border-white/5 rounded-2xl p-6 md:p-8">
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2">Para Picar</h4>
+                        <div class="space-y-3">
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Papas Fritas Personal</span><div class="menu-dots"></div><span class="text-gold font-bold">9.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Papas Fritas Grande</span><div class="menu-dots"></div><span class="text-gold font-bold">16.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Chipaguazú</span><div class="menu-dots"></div><span class="text-gold font-bold">7.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200 font-bold tracking-wide">Sopa Paraguaya</span><div class="menu-dots"></div><span class="text-gold font-bold">7.000</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#111] border border-brandBlue/30 rounded-2xl p-6 md:p-8 text-center flex flex-col justify-center">
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-4">Agregados extras</h4>
+                        <p class="text-sm text-gray-300 mb-4">Personaliza tu pedido por solo <span class="text-gold font-bold text-lg">2.000 Gs.</span> c/u</p>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <span class="bg-black border border-white/10 px-4 py-2 rounded-full text-sm font-bold">Jamón</span>
+                            <span class="bg-black border border-white/10 px-4 py-2 rounded-full text-sm font-bold">Quesos</span>
+                            <span class="bg-black border border-white/10 px-4 py-2 rounded-full text-sm font-bold">Verduras</span>
+                            <span class="bg-black border border-white/10 px-4 py-2 rounded-full text-sm font-bold">Huevo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="bebidas" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-[#111] border border-white/5 rounded-2xl p-6 md:p-8">
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2">Bebidas y Gaseosas</h4>
+                        <div class="space-y-2">
+                            <div class="menu-list-item"><span class="text-gray-200">Gaseosas 200/250ml / Sprite 250ml</span><div class="menu-dots"></div><span class="text-gold font-bold">5.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Gaseosas 500ml / Lata</span><div class="menu-dots"></div><span class="text-gold font-bold">10.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Gaseosas 1L</span><div class="menu-dots"></div><span class="text-gold font-bold">13.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Gaseosas 2L</span><div class="menu-dots"></div><span class="text-gold font-bold">20.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Agua 500ml (Sin/Con Gas)</span><div class="menu-dots"></div><span class="text-gold font-bold">5.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Jugos Del Valle (Varios Tamaños)</span><div class="menu-dots"></div><span class="text-gold font-bold">5.000 - 13.000</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#111] border border-white/5 rounded-2xl p-6 md:p-8">
+                        <h4 class="font-serif text-2xl font-bold text-gold mb-6 border-b border-white/10 pb-2">Tragos y Cervezas</h4>
+                        <div class="space-y-2">
+                            <div class="menu-list-item"><span class="text-gray-200">Cervezas (600-710ml)</span><div class="menu-dots"></div><span class="text-gold font-bold">22.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Cervezas (1 Litro)</span><div class="menu-dots"></div><span class="text-gold font-bold">20.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Caipiriña</span><div class="menu-dots"></div><span class="text-gold font-bold">20.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Marea Roja / Mojito Marinero</span><div class="menu-dots"></div><span class="text-gold font-bold">25.000</span></div>
+                            <div class="menu-list-item"><span class="text-gray-200">Daikiri / Piña Colada / Fernet</span><div class="menu-dots"></div><span class="text-gold font-bold">25.000</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-0 relative flex flex-col lg:flex-row">
+        <div class="w-full lg:w-1/2 bg-black flex flex-col justify-center p-10 md:p-20 relative overflow-hidden z-10">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-50"></div>
+            
+            <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8" data-aos="fade-right">Atraca en nuestro <br><span class="text-gold text-5xl md:text-6xl">Puerto</span></h2>
+            
+            <div class="space-y-8" data-aos="fade-right" data-aos-delay="200">
+                <div class="flex items-start gap-4 group">
+                    <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-all">
+                        <i class="fa-solid fa-location-dot text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-gray-500 uppercase tracking-widest text-sm font-bold mb-1">Central Asunción: Sajonia</h4>
+                        <p class="text-lg font-light text-gray-300">Avda. Carlos Antonio López entre<br>Arellano y Alejo Garcia.</p>
+                        <p class="text-sm text-gold mt-2 font-bold"><i class="fa-solid fa-motorcycle"></i> Delivery y Pick up: (0986) 460 970</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-4 group w-full">
+                    <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-all shrink-0">
+                        <i class="fa-solid fa-clock text-xl"></i>
+                    </div>
+                    <div class="w-full">
+                        <h4 class="text-gray-500 uppercase tracking-widest text-sm font-bold mb-3">Horarios</h4>
+                        <div class="space-y-3 w-full pr-4 md:pr-0">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-4 bg-[#111] border-l-4 border-green-500 rounded-r-xl shadow-lg relative overflow-hidden gap-2">
+                                <span class="font-bold text-white relative z-10 uppercase tracking-wider text-sm">Lunes a Jueves</span>
+                                <div class="md:text-right relative z-10">
+                                    <span class="block text-white font-mono text-base font-bold">18:00 A 00:30H</span>
+                                    <span class="text-green-400 text-xs font-black tracking-widest flex items-center gap-2 mt-1">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]"></span> ABIERTO
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col md:flex-row md:items-center justify-between p-4 bg-[#111] border-l-4 border-gold rounded-r-xl shadow-lg relative overflow-hidden gap-2">
+                                <span class="font-bold text-white relative z-10 uppercase tracking-wider text-sm">Viernes a Domingo</span>
+                                <div class="md:text-right relative z-10">
+                                    <span class="block text-white font-mono text-base font-bold text-gold">18:00 A 01:00H</span>
+                                    <span class="text-gold text-xs font-black tracking-widest flex items-center gap-2 mt-1">
+                                        <span class="w-2 h-2 rounded-full bg-gold animate-pulse shadow-[0_0_8px_#fde047]"></span> HORARIO EXTENDIDO
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 h-[400px] lg:h-auto bg-darker relative" data-aos="fade-left">
+            <div class="absolute inset-0 bg-black/20 pointer-events-none z-10 mix-blend-multiply"></div>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14429.351061730997!2d-57.6534!3d-25.2858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da94008ab5fa1%3A0x6e255ddbcf3a1a9e!2sAv%20Carlos%20Antonio%20L%C3%B3pez%2C%20Asunci%C3%B3n!5e0!3m2!1ses-419!2spy!4v1700000000000!5m2!1ses-419!2spy" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-dark-filter absolute inset-0 w-full h-full object-cover"></iframe>
+        </div>
+    </section>
+
+    <footer class="bg-black py-12 border-t border-white/5">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="font-serif text-2xl font-bold mb-2">El Marinero Restobar</h3>
+            <p class="text-gold text-sm font-bold mb-4 tracking-widest uppercase">@ELMARINEROPY</p>
+            <p class="text-gray-500 text-sm mb-8">Encontranos en PedidosYa como: El Marinero</p>
+            <p class="text-gray-700 text-xs tracking-widest uppercase">© 2026 El Marinero. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <a href="#" onclick="pedirWhatsApp('Consulta General', '')" class="fixed bottom-6 right-6 z-50 group flex items-center justify-center">
+        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.6)] animate-pulse hover:animate-none hover:scale-110 transition-transform duration-300">
+            <i class="fa-brands fa-whatsapp text-white text-3xl"></i>
+        </div>
+    </a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
+
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                const target = btn.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+                
+                AOS.refresh();
+            });
+        });
+
+        function pedirWhatsApp(producto, precio) {
+            if(event) event.preventDefault();
+            const numeroTelefono = "595986460970"; 
+            let mensaje = (precio !== "" && precio !== "Consultar") 
+                ? `¡Hola El Marinero! ⚓ Quiero pedir: *${producto}* (Gs. ${precio}). ¿Me confirman el pedido?`
+                : `¡Hola El Marinero! ⚓ Quisiera hacer un pedido / consulta.`;
+            window.open(`https://wa.me/${numeroTelefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
+        }
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg', 'bg-darker/95');
+                nav.classList.remove('bg-darker/80');
+            } else {
+                nav.classList.remove('shadow-lg', 'bg-darker/95');
+                nav.classList.add('bg-darker/80');
+            }
+        });
+    </script>
+</body>
+</html>
